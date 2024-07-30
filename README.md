@@ -98,6 +98,13 @@ cy.deleteEmailByIndex(1)
 Deletes email by index top down. Top email in the INBOX is under index 1.
 
 
+#### Wait for newly arriving mail
+```js
+cy.waitForMail()
+```
+Waits for a new email to arrive. usefull in verification process testing
+
+
 ```js
 cy.pasteHtml(html)
 ```
@@ -199,6 +206,7 @@ it('returns parsed body', ()=>{
 
 ## Contributors
 Filip Cica
+[Ahamed Althaf](https://github.com/hmmdlthf)
 
 ## TODO
 Add waitForEmailWithSubject()
@@ -206,5 +214,3 @@ Add waitForEmailWithSubject()
 Add getEmailBySubject()
 
 Add methods for parsing various attachments
-
-Add waitForEmail()
