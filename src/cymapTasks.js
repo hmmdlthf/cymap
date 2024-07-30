@@ -36,5 +36,10 @@ module.exports={
     async deleteEmailByIndex(index){
       const isDeleted = await deleteEmailByIndex(index)
       return isDeleted
+    },
+    //8
+    async waitForMail(){
+      const mail = await waitForMail()
+      return mail
     }
 }

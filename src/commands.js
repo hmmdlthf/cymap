@@ -198,47 +198,57 @@ function deleteEmailByIndex(indexOfMailBottomUp=1){
     })
 }
 
-function waitForMail(){
-    return new Promise((resolve) => {
-        ImapProxy.createConnection()
-        const imap = ImapProxy.getConnectionInstance()
-        let messages = []
-        imap.once("mail", (numNewMessages)=>{
-            imap.openBox("INBOX", true,(err, box)=>{
+function waitForMail() {
+    return new Promise((resolve, reject) => {
+        ImapProxy.createConnection();
+        const imap = ImapProxy.getConnectionInstance();
+        let messages = [];
+
+        imap.once("ready", () => {
+            imap.openBox("INBOX", true, (err, box) => {
                 if (err) {
-                    console.log(err)
+                    reject(err);
+                    return;
                 }
-                const imapFetch = imap.seq.fetch(`1:${numNewMessages}`, {bodies: '', struct: true});
-                imapFetch.on("message", (message, seqno)=>{
-                    console.log(seqno)
-                    message.on("body", async (stream, info)=>{
-                        console.log(info)
-                        const mail = await simpleParser(stream)
-                        messages.push(mail)
+                console.log('INBOX opened, waiting for new mail...');
+
+                imap.on("mail", (numNewMessages) => {
+                    console.log(`New mail arrived: ${numNewMessages} messages`);
+                    const fetchOptions = {
+                        bodies: '',
+                        struct: true
+                    };
+                    const imapFetch = imap.seq.fetch(`${box.messages.total - numNewMessages + 1}:${box.messages.total}`, fetchOptions);
+
+                    imapFetch.on("message", (message, seqno) => {
+                        message.on("body", async (stream, info) => {
+                            const mail = await simpleParser(stream);
+                            console.log(`Fetched mail: ${mail.subject}`);
+                            messages.push(mail);
+
+                            imap.end();
+                            resolve(messages);
+                        });
                     })
-                })
-                imapFetch.on("error", async (err)=>{
-                    console.log(err)
-                    if(err)throw err               
-                })
-
-                imapFetch.on("end", async ()=>{                 
-                   resolve(messages)
-                })
-            })
-
+                    imapFetch.on("error", async (err)=>{ 
+                        console.log(err)                
+                        return reject(err)
+                    })
+                });
+            });
         })
-        imap.once('error', (err)=>{
+        imap.once('error', function(err) {
             console.log(err)
-            if (err) throw err;
-        });
+            return reject(modifyError(err))
+        })
         imap.once("end", (err)=>{
             console.log(err)
-            if (err) throw err;
+            if (err) return reject(err)
         })
-        imap.connect()
-    })
+    imap.connect();
+    });
 }
+
 
 module.exports = {
     getAllMail,

@@ -30,3 +30,7 @@ Cypress.Commands.add("getEmailByIndex", (index=1)=>{
 Cypress.Commands.add("deleteEmailByIndex", (index=1)=>{
     return cy.task("deleteEmailByIndex", index)
 })
+//8
+Cypress.Commands.add("waitForMail", ()=>{
+    return cy.task("waitForMail")
+})

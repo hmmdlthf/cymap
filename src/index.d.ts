@@ -58,5 +58,11 @@ declare namespace Cypress {
       * @returns {Object}
       */
      deleteEmailByIndex(index:Number=1):Chainable<Object>
+     //8
+     /**
+      * Fetches email by waiting for one
+      * @returns {Object}
+      */
+     waitForMail():Chainable<Object>
   }
 }
