@@ -1,5 +1,5 @@
 const ImapProxy = require("../src/ImapProxy")
-const {getAllMail, deleteAllMail, getEmailByIndex, deleteEmailByIndex} = require("./commands")
+const {getAllMail, deleteAllMail, getEmailByIndex, deleteEmailByIndex, waitForMail} = require("./commands")
 
 module.exports={
     //1
