@@ -205,8 +205,8 @@ it('returns parsed body', ()=>{
 ```
 
 ## Contributors
-Filip Cica
-[Ahamed Althaf](https://github.com/hmmdlthf)
+- Filip Cica
+- [Ahamed Althaf](https://github.com/hmmdlthf)
 
 ## TODO
 Add waitForEmailWithSubject()
